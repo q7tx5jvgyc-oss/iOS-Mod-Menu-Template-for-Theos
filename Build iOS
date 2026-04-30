@@ -1,0 +1,47 @@
+#import <UIKit/UIKit.h>
+#include <substrate.h>
+#include <iostream>
+#include <vector>
+
+// Mustache Mod - موستاش مود
+// Specifications: 1. Speed, 2. No Shock, 3. No Close, 4. No Tap, 5. Royal
+
+void DrawMustacheMenu() {
+    ImGui::Begin("موستاش مود - MUSTACHE MOD");
+
+    static bool speed_hack = false;
+    if (ImGui::Checkbox("1. تسريع اللعبه", &speed_hack)) {
+        // Logic for Speed Hack
+    }
+
+    static bool no_shock = false;
+    if (ImGui::Checkbox("2. ازاله الصدمه", &no_shock)) {
+        // Logic for No Shock
+    }
+
+    static bool no_close = false;
+    if (ImGui::Checkbox("3. ازاله المغلق", &no_close)) {
+        // Logic for No Close
+    }
+
+    static bool no_tap = false;
+    if (ImGui::Checkbox("4. ازاله تكبيس", &no_tap)) {
+        // Logic for No Tap
+    }
+
+    static bool royal_active = false;
+    if (ImGui::Checkbox("5. تفعيل رويال", &royal_active)) {
+        // Logic for Royal Activation
+    }
+
+    ImGui::Separator();
+    ImGui::Text("Mustache Mod v1.0 | BY: YOURNAME");
+
+    ImGui::End();
+}
+
+static __attribute__((constructor)) void init() {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // Initialize Menu Rendering here
+    });
+}
