@@ -1,0 +1,63 @@
+#import <UIKit/UIKit.h>
+#import "Includes.h"
+
+// --- بداية إعدادات موستاش مود ---
+
+-(void)setupMenu {
+    
+    // 1. تعيين اسم المود الرئيسي
+    [menu setTitle:NSSENCRYPT("موستاش مود - MUSTACHE MOD")];
+    
+    // 2. تعيين لون الواجهة (أحمر غامق ليناسب اسم موستاش)
+    [menu setMenuColor:UIColorFromHex(0x8B0000)]; 
+
+    // 3. إضافة الميزات الخمس المطلوبة بالترتيب
+    
+    // الميزة الأولى: تسريع اللعبة
+    [switches addSwitch:NSSENCRYPT("1. تسريع اللعبه") 
+              description:NSSENCRYPT("تفعيل السرعة القصوى في اللعب والحركة")];
+
+    // الميزة الثانية: إزالة الصدمة
+    [switches addSwitch:NSSENCRYPT("2. ازاله الصدمه") 
+              description:NSSENCRYPT("إلغاء تأثير الاصطدام عند اللعب")];
+
+    // الميزة الثالثة: إزالة المغلق
+    [switches addSwitch:NSSENCRYPT("3. ازاله المغلق") 
+              description:NSSENCRYPT("فتح جميع الخانات المغلقة تلقائياً")];
+
+    // الميزة الرابعة: إزالة التكبيس
+    [switches addSwitch:NSSENCRYPT("4. ازاله تكبيس") 
+              description:NSSENCRYPT("منع التكبيس المزعج من الخصوم")];
+
+    // الميزة الخامسة: تفعيل رويال
+    [switches addSwitch:NSSENCRYPT("5. تفعيل رويال") 
+              description:NSSENCRYPT("تفعيل مميزات عضوية الرويال بصرية")];
+}
+
+// --- قسم الأوامر البرمجية (الأوفست) ---
+// هنا يتم الربط الفعلي بين الأزرار واللعبة
+
+void (*old_update)(void *instance);
+void update(void *instance) {
+    if (instance) {
+        // فحص زر تسريع اللعبة
+        if ([switches isSwitchOn:NSSENCRYPT("1. تسريع اللعبه")]) {
+            // كود التسريع يوضع هنا (مثال)
+        }
+        
+        // فحص زر الرويال
+        if ([switches isSwitchOn:NSSENCRYPT("5. تفعيل رويال")]) {
+            // كود تفعيل الرويال بَصرياً
+        }
+    }
+    old_update(instance);
+}
+
+// إعداد الحقن عند تشغيل اللعبة
+static __attribute__((constructor)) void init() {
+    // الانتظار 5 ثوانٍ لضمان تحميل اللعبة ثم إظهار المنيو
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // استدعاء المنيو
+        NSLog(@"[Mustache Mod] Menu Initialized Successfully");
+    });
+}
