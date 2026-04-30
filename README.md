@@ -1,4 +1,4 @@
-# iOS Mod Menu Template for Theos!
+# iOS Mod MenuTemplate for Theos!
 
 <div style="text-align: center;">
 <b>Sample UI of the Menu:</b><br>
