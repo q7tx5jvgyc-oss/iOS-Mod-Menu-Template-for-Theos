@@ -1,35 +1,38 @@
-// واجهة موستاش مود - MUSTACHE MOD UI
-void DrawMustacheMenu() {
-    // تم تغيير اسم المود هنا
-    ImGui::Begin("موستاش مود - MUSTACHE MOD"); 
+#import <UIKit/UIKit.h>
 
-    static bool speed = false;
-    if (ImGui::Switch("1. تسريع اللعبه", &speed)) {
-        // يتم وضع كود الـ Offset الخاص بالسرعة هنا
-    }
+%hook GameViewController
 
-    static bool no_shock = false;
-    if (ImGui::Switch("2. ازاله الصدمه", &no_shock)) {
-        // كود إلغاء تأثير الصدمة
-    }
-
-    static bool no_close = false;
-    if (ImGui::Switch("3. ازاله المغلق", &no_close)) {
-        // كود فتح الخانات المغلقة
-    }
-
-    static bool no_tap = false;
-    if (ImGui::Switch("4. ازاله تكبيس", &no_tap)) {
-        // كود منع التكبيس المزعج
-    }
-
-    static bool royal = false;
-    if (ImGui::Switch("5. تفعيل رويال", &royal)) {
-        // كود تفعيل مميزات الرويال البصرية
-    }
-
-    ImGui::Separator(); // خط فاصل للجمالية
-    ImGui::Text("Mustache Mod v1.0"); // توقيع المود في الأسفل
-
-    ImGui::End();
+- (void)viewDidLoad {
+    %orig;
+    [self setupAutoTouch];
 }
+
+- (void)setupAutoTouch {
+    UIButton *autoTouchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    autoTouchButton.frame = CGRectMake(20, 50, 120, 50);
+    autoTouchButton.backgroundColor = [UIColor redColor];
+    [autoTouchButton setTitle:@"Auto OFF" forState:UIControlStateNormal];
+    [autoTouchButton addTarget:self action:@selector(toggleAutoTouch) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:autoTouchButton];
+}
+
+- (void)toggleAutoTouch {
+    static BOOL autoTouchEnabled = NO;
+    autoTouchEnabled = !autoTouchEnabled;
+
+    if (autoTouchEnabled) {
+        NSLog(@"Auto Touch ON");
+        [self performSelector:@selector(executeAutoTouch) withObject:nil afterDelay:0.1];
+    } else {
+        NSLog(@"Auto Touch OFF");
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(executeAutoTouch) object:nil];
+    }
+}
+
+- (void)executeAutoTouch {
+    CGPoint touchPoint = CGPointMake(160, 300);
+    NSLog(@"Simulating touch at (%f, %f)", touchPoint.x, touchPoint.y);
+    [self performSelector:@selector(executeAutoTouch) withObject:nil afterDelay:0.1];
+}
+
+%end
