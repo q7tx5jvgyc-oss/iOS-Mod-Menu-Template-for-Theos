@@ -139,4 +139,47 @@ static void didFinishLaunching(CFNotificationCenterRef center, void *observer, C
 
 %ctor {
   CFNotificationCenterAddObserver(CFNotificationCenterGetLocalCenter(), NULL, &didFinishLaunching, (CFStringRef)UIApplicationDidFinishLaunchingNotification, NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+}#import <UIKit/UIKit.h>
+
+// الربط مع واجهة التطبيق المستهدفة
+%hook GameViewController
+
+- (void)viewDidLoad {
+    %orig; // استدعاء الوظائف الأصلية للتطبيق
+    [self setupAutoTouchButton]; // إضافة زر التحكم بالنقر التلقائي
 }
+
+// إنشاء زر للتحكم في ميزة Auto Touch
+- (void)setupAutoTouchButton {
+    UIButton *autoTouchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    autoTouchButton.frame = CGRectMake(20, 50, 150, 50); // تحديد مكان الزر
+    autoTouchButton.backgroundColor = [UIColor blueColor];
+    [autoTouchButton setTitle:@"Start Auto Touch" forState:UIControlStateNormal];
+    [autoTouchButton addTarget:self action:@selector(toggleAutoTouch) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:autoTouchButton];
+}
+
+// تفعيل أو إيقاف Auto Touch
+- (void)toggleAutoTouch {
+    static BOOL autoTouchEnabled = NO; // حالة النقر التلقائي
+    autoTouchEnabled = !autoTouchEnabled;
+
+    if (autoTouchEnabled) {
+        NSLog(@"Auto Touch Enabled");
+        [self performSelector:@selector(executeAutoTouch) withObject:nil afterDelay:0.1];
+    } else {
+        NSLog(@"Auto Touch Disabled");
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(executeAutoTouch) object:nil];
+    }
+}
+
+// محاكاة النقر التلقائي
+- (void)executeAutoTouch {
+    CGPoint touchPoint = CGPointMake(160, 300); // النقطة المستهدفة للنقر
+    NSLog(@"Performing touch at (%f, %f)", touchPoint.x, touchPoint.y);
+
+    // تنفيذ النقر المتكرر
+    [self performSelector:@selector(executeAutoTouch) withObject:nil afterDelay:0.1];
+}
+
+%end
